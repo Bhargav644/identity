@@ -1,9 +1,9 @@
 const authService = require('../services/authService');
-const { validateRegistration, validateLogin } = require('../utils/validators');
+const {  validateLoginData, validateRegisterData } = require('../utils/validators');
 
 const registerSession = async (req, res, next) => {
     try {
-        const validation = validateRegistration(req.body);
+        const validation = validateRegisterData(req.body);
         if (!validation.isValid) {
             return res.status(400).json({
                 error: 'Validation failed',
@@ -25,7 +25,7 @@ const registerSession = async (req, res, next) => {
 
 const loginSession = async (req, res, next) => {
     try {
-        const validation = validateLogin(req.body);
+        const validation = validateLoginData(req.body);
         if (!validation.isValid) {
           return res.status(400).json({
             error: 'Validation failed',

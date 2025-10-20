@@ -16,8 +16,8 @@ const pool = new Pool({
 
 const sessionConfig = session({
   store: new pgSession({
-    pool: pool,                          
-    tableName: 'session',                
+    pool: pool,
+    tableName: 'session',
     createTableIfMissing: false,         // We manage tables with Prisma
     pruneSessionInterval: 60,            // Clean expired sessions every 60s
   }),
@@ -26,13 +26,13 @@ const sessionConfig = session({
    * resave: Prevents saving session if unmodified, reducing unnecessary database writes.
    * saveUninitialized: Avoids storing uninitialized sessions, enhancing privacy and reducing storage.
    */
+  name: process.env.SESSION_NAME || 'sessionId',
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    name: process.env.SESSION_NAME || 'sessionId',
     httpOnly: true,                      // XSS/Cross site scripting protection - can't access in client-side JS
-    secure: process.env.NODE_ENV === 'production',  
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',                     // CSRF/(Cross-Site Request Forgery) protection
     maxAge: parseInt(process.env.SESSION_MAX_AGE) || 24 * 60 * 60 * 1000,  // 1 day
   },
