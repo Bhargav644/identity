@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -14,25 +8,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model USER {
-  id        String   @id @default(uuid())  //primary-key
-  email     String   @unique               // Unique
-  password  String                         // Hashed pwd
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
   name      String
-  createdAt DateTime @default(now())       // will take auto timestamp
-  updatedAt DateTime @updatedAt            // will auto update 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
-  @@map("users")                           //Name of table
+  @@map("users")
 }
 
-// Implementing Session Based authentication
 model Session {
-  sid    String   @id                     
-  sess   Json                             // Session data (JSON)
-  expire DateTime                         
+  sid    String   @id
+  sess   Json
+  expire DateTime
 
-  @@index([expire])  // will index it for quick responses
-  @@map("session")   
+  @@index([expire])
+  @@map("session")
 }

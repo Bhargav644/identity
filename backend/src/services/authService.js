@@ -56,4 +56,25 @@ class AuthService {
             name: user.name,
         };
     }
+
+    async getUserById(userId) {
+        const user=await prisma.user.findUnique({
+            where:{id:userId},
+            select:{
+                id:true,
+                email:true,
+                name:true,
+                createdAt: true,
+                updatedAt: true,
+            }
+        });
+        if(!user){
+            const error=new Error('User not found');
+            error.statusCode=404;
+            throw error;
+        }
+        return user;
+    }
 }
+
+module.exports = new AuthService();

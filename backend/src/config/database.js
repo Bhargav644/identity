@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('../../generated/prisma');
 
 /* Benefits of PRISMA:
     1. Supports Connection Pooling
