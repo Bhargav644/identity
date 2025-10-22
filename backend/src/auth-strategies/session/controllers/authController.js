@@ -1,5 +1,5 @@
-const authService = require('../services/authService');
-const {  validateLoginData, validateRegisterData } = require('../utils/validators');
+const authService = require('../../../services/authService');
+const {  validateLoginData, validateRegisterData } = require('../../../utils/validators');
 
 const registerSession = async (req, res, next) => {
     try {
@@ -53,6 +53,7 @@ const loginSession = async (req, res, next) => {
 const getProfileSession = async (req, res, next) => {
   try {
     const userId = req.session.userId;
+    console.log({userId})
     const user = await authService.getUserById(userId);
 
     res.status(200).json({
