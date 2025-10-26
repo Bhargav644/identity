@@ -20,7 +20,7 @@ const registerJwt = async (req, res, next) => {
     const token = jwt.sign({ ...user }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.cookies("token", token, { ...cookieConfig });
+    res.cookie("token", token, { ...cookieConfig });
     res.status(200).json({
       message: "Registration successful",
       user,

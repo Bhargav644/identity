@@ -1,0 +1,15 @@
+node_modules/
+generated/
+.env
+.env.local
+.env.development
+.env.production
+docker-compose.yml
+.git
+.gitignore
+README.md
+*.md
+.vscode
+.idea
+*.log
+npm-debug.log*

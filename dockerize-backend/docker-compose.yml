@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: identity_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: identity
+      POSTGRES_PASSWORD: random@123
+      POSTGRES_DB: identity
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  migrate:
+    image: bhargav1848/identity:migrate
+    container_name: identity_migrate
+    restart: "no"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-identity}:${POSTGRES_PASSWORD:-random@123}@db:5432/${POSTGRES_DB:-identity}?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  app:
+    image: bhargav1848/identity:v1.0.0
+    container_name: identity
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-identity}:${POSTGRES_PASSWORD:-random@123}@db:5432/${POSTGRES_DB:-identity}?schema=public
+      PORT: ${PORT:-3000}
+      NODE_ENV: ${NODE_ENV:-production}
+      SESSION_SECRET: ${SESSION_SECRET:-CDW34@@34LSK)MM_HARSH_KKH}
+      SESSION_NAME: ${SESSION_NAME:-sessionId}
+      SESSION_MAX_AGE: ${SESSION_MAX_AGE:-86400000}
+      JWT_SECRET: ${JWT_SECRET:-HDJDK@232321We%jen&*Jnn}
+      BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-10}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

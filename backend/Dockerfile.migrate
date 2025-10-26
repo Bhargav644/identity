@@ -1,0 +1,17 @@
+# Lightweight image ONLY for running migrations
+# Build: docker build -f Dockerfile.migrate -t bhargav1848/identity:migrate .
+# Run: docker run --rm --network identity_app-network -e DATABASE_URL=... bhargav1848/identity:migrate
+
+FROM node:20-alpine
+
+WORKDIR /home/app
+
+# Copy only what's needed for migrations
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Install only Prisma CLI (needed for migrations)
+RUN npm install prisma && npm cache clean --force
+
+# Run migrations when container starts
+CMD ["npx", "prisma", "migrate", "deploy"]
